@@ -84,6 +84,13 @@
           <button id="lightBtn" class="btn btn-secondary">轻一些</button>
           <button id="deepBtn" class="btn btn-secondary">深入一些</button>
         </div>
+
+        <section class="metronome-panel desktop-only">
+          <h4>Metronome</h4>
+          <div class="metronome-embed">
+            <iframe src="https://tangkk.github.io/web-justmetronome/" title="JustMetronome" loading="lazy"></iframe>
+          </div>
+        </section>
       </section>
 
       <section class="panel result-panel" id="resultPanel">
@@ -114,14 +121,14 @@
               <button id="toggleChartBtn" class="link-btn" type="button">展开 chart</button>
             </div>
           </div>
-        </div>
-      </section>
 
-      <section class="panel chart-panel hidden" id="chartPanel">
-        <div class="panel-head">
-          <h2 class="panel-title">Chart</h2>
+          <section class="chart-panel hidden" id="chartPanel">
+            <div class="panel-head chart-head-inline">
+              <h2 class="panel-title">Chart</h2>
+            </div>
+            <div class="chart-preview" id="chartPreview"></div>
+          </section>
         </div>
-        <div class="chart-preview" id="chartPreview"></div>
       </section>
     </div>
   </main>

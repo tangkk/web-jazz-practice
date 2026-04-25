@@ -83,7 +83,7 @@ h1 {
 
 .workspace-grid {
   display: grid;
-  grid-template-columns: 420px minmax(0, 1fr);
+  grid-template-columns: 380px minmax(0, 1fr);
   gap: 16px;
   align-items: start;
   margin-top: 18px;
@@ -102,16 +102,18 @@ h1 {
 }
 
 .chart-panel {
-  grid-column: 1 / -1;
   min-height: auto;
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.chart-head-inline {
+  margin-bottom: 10px;
 }
 
 .chart-panel .chart-preview {
   margin-top: 0;
-}
-
-.chart-panel .chart-preview iframe {
-  height: 720px;
 }
 
 .hidden {
@@ -261,6 +263,26 @@ li {
 
 .tune-actions {
   margin-top: 8px;
+}
+
+.metronome-panel {
+  margin-top: 18px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.metronome-embed {
+  margin-top: 8px;
+  border: 1px solid var(--line);
+  background: #fff;
+  overflow: hidden;
+}
+
+.metronome-embed iframe {
+  display: block;
+  width: 100%;
+  height: 760px;
+  border: 0;
 }
 
 .link-btn {
@@ -452,6 +474,10 @@ li {
 
   .panel {
     min-height: auto;
+  }
+
+  .desktop-only {
+    display: none;
   }
 
   .embedded-chart .grid {
