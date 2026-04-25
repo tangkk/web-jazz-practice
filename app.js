@@ -81,7 +81,7 @@ const UI_TEXT = {
       collapseChart: '收起 chart',
       loadingChart: '载入中...',
       openRealbook: '打开 web-realbook',
-      openTranscriber: '打开 Video/Audio Transcriber'
+      openTranscriber: '打开 transcriber'
     },
     sections: {
       routine: '练习安排',
@@ -155,7 +155,7 @@ const UI_TEXT = {
       collapseChart: 'Hide chart',
       loadingChart: 'Loading...',
       openRealbook: 'Open web-realbook',
-      openTranscriber: 'Open Video/Audio Transcriber'
+      openTranscriber: 'Open transcriber'
     },
     sections: {
       routine: 'Practice Plan',
