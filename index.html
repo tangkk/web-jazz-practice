@@ -20,7 +20,7 @@
 
     <hr class="section-rule" />
 
-    <div class="workspace-grid">
+    <div class="workspace-grid" id="workspaceGrid">
       <section class="panel controls-panel">
         <div class="panel-head">
           <h2 class="panel-title">条件设置</h2>
@@ -67,9 +67,9 @@
           <label>
             <span>推荐倾向</span>
             <select id="bias">
-              <option value="balanced">平衡</option>
-              <option value="personal">偏向进阶训练重点</option>
-              <option value="general">更通用</option>
+              <option value="general">入门</option>
+              <option value="balanced">进阶</option>
+              <option value="personal">高手</option>
             </select>
           </label>
 
@@ -110,8 +110,18 @@
           <div class="tune-block">
             <h4>可搭配曲目</h4>
             <p id="resultTune"></p>
+            <div class="tune-actions hidden" id="tuneActions">
+              <button id="toggleChartBtn" class="link-btn" type="button">展开 chart</button>
+            </div>
           </div>
         </div>
+      </section>
+
+      <section class="panel chart-panel hidden" id="chartPanel">
+        <div class="panel-head">
+          <h2 class="panel-title">Chart</h2>
+        </div>
+        <div class="chart-preview" id="chartPreview"></div>
       </section>
     </div>
   </main>

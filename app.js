@@ -19,8 +19,13 @@ const resultTitle = document.getElementById('resultTitle');
 const resultSummary = document.getElementById('resultSummary');
 const stepsList = document.getElementById('stepsList');
 const resultTune = document.getElementById('resultTune');
+const tuneActions = document.getElementById('tuneActions');
+const toggleChartBtn = document.getElementById('toggleChartBtn');
+const chartPanel = document.getElementById('chartPanel');
+const chartPreview = document.getElementById('chartPreview');
 
 let lastPlan = null;
+let currentTune = null;
 
 const PREFERENCE_RULES = [
   {
@@ -188,9 +193,28 @@ function scoreItem(item, options) {
     score += Math.max(0, 3 - minDiff / 5);
   }
 
-  if (options.bias === 'personal' && item.bias.includes('personal')) score += 3;
-  if (options.bias === 'general' && item.bias.includes('general')) score += 3;
-  if (options.bias === 'balanced') score += item.bias.length >= 2 ? 2 : 1;
+  if (options.bias === 'general') {
+    if (item.bias.includes('general')) score += 3;
+    if (item.level.includes('easy')) score += 3;
+    if (item.level.includes('high')) score -= 4;
+    if (item.energies.includes('low')) score += 1.5;
+    if (item.categories.includes('dominant-colors') || item.categories.includes('modern')) score -= 3;
+  }
+
+  if (options.bias === 'balanced') {
+    if (item.bias.length >= 2) score += 2;
+    if (item.level.includes('medium')) score += 2;
+    if (item.level.includes('easy-medium')) score += 1.5;
+    if (item.level.includes('medium-high')) score += 1.5;
+  }
+
+  if (options.bias === 'personal') {
+    if (item.bias.includes('personal')) score += 4;
+    if (item.level.includes('high')) score += 3;
+    if (item.level.includes('medium-high')) score += 2;
+    if (item.categories.includes('dominant-colors') || item.categories.includes('modern')) score += 2;
+    if (item.energies.includes('low') && item.level.includes('easy')) score -= 2;
+  }
 
   const effectiveMode = parsedPref.modeBias || options.mode;
 
@@ -301,6 +325,19 @@ function scoreTune(tune, options, steps) {
   if (options.energy === 'low' && tune.tags.includes('rhythm-changes')) score -= 3;
   if (options.energy === 'high' && (tune.tags.includes('modal') || tune.tags.includes('rhythm-changes'))) score += 2;
 
+  if (options.bias === 'general') {
+    if (tune.tags.includes('standard') || tune.tags.includes('melody')) score += 2;
+    if (tune.tags.includes('rhythm-changes') || tune.tags.includes('modern')) score -= 2;
+  }
+
+  if (options.bias === 'balanced') {
+    if (tune.tags.includes('standard') || tune.tags.includes('ii-v-i') || tune.tags.includes('harmony')) score += 2;
+  }
+
+  if (options.bias === 'personal') {
+    if (tune.tags.includes('modal') || tune.tags.includes('rhythm-changes') || tune.tags.includes('modern')) score += 3;
+  }
+
   return score;
 }
 
@@ -313,15 +350,17 @@ function recommendTune(options, steps) {
   let r = Math.random() * total;
   for (const entry of weightedTunes) {
     r -= entry.score;
-    if (r <= 0) return entry.tune.title;
+    if (r <= 0) return entry.tune;
   }
-  return weightedTunes[weightedTunes.length - 1]?.tune.title || pickRandom(data.tunes).title;
+  return weightedTunes[weightedTunes.length - 1]?.tune || pickRandom(data.tunes);
 }
 
 function buildTitle(options, steps) {
   const effectiveMode = options.parsedPreference.modeBias || options.mode;
   if (options.focus === 'dominant-colors') return '本次推荐侧重张力音与解决';
   if (options.focus === 'modern') return '本次推荐侧重现代和声色彩';
+  if (options.bias === 'general') return '本次推荐侧重基础材料与稳定性';
+  if (options.bias === 'personal') return '本次推荐侧重较高难度与扩展语言';
   if (effectiveMode === 'light' || options.energy === 'low') return '本次推荐侧重稳定与连续性';
   if (effectiveMode === 'deep' || options.energy === 'high') return '本次推荐侧重较高强度的训练';
   if (steps.some(step => step.categories.includes('repertoire'))) return '本次推荐包含曲目整合内容';
@@ -335,14 +374,41 @@ function buildSummary(options, steps, duration) {
   return `${duration || 20} 分钟左右，偏向 ${catText || '基础综合'}。可以直接照着练，不用再临时做选择。${prefText}`;
 }
 
+function renderTune(tune) {
+  currentTune = tune || null;
+  chartPanel.classList.add('hidden');
+  chartPreview.innerHTML = '';
+  tuneActions.classList.add('hidden');
+  toggleChartBtn.textContent = '展开 chart';
+
+  if (!tune) {
+    resultTune.textContent = '';
+    return;
+  }
+
+  if (typeof tune === 'string') {
+    resultTune.textContent = tune;
+    return;
+  }
+
+  if (tune.irealPath) {
+    const url = `https://tangkk.github.io/web-realbook/ireal-demo/${tune.irealPath}`;
+    resultTune.innerHTML = `<a href="${url}" target="_blank" rel="noopener noreferrer">${tune.title}</a>`;
+    tuneActions.classList.remove('hidden');
+    return;
+  }
+
+  resultTune.textContent = tune.title;
+}
+
 function renderPlan(plan) {
   emptyState.classList.add('hidden');
   resultState.classList.remove('hidden');
 
-  resultKicker.textContent = 'TODAY\'S PRACTICE';
+  resultKicker.textContent = 'PRACTICE';
   resultTitle.textContent = plan.title;
   resultSummary.textContent = plan.summary;
-  resultTune.textContent = plan.tune;
+  renderTune(plan.tune);
 
   stepsList.innerHTML = '';
   plan.steps.forEach(step => {
@@ -382,6 +448,46 @@ function generate(mode = 'normal') {
 });
 
 loadPreferences();
+
+toggleChartBtn.addEventListener('click', async () => {
+  if (!currentTune || !currentTune.irealPath) return;
+  const isHidden = chartPanel.classList.contains('hidden');
+
+  if (isHidden) {
+    const url = `https://tangkk.github.io/web-realbook/ireal-demo/${currentTune.irealPath}`;
+    toggleChartBtn.textContent = '载入中...';
+
+    try {
+      const response = await fetch(url);
+      const html = await response.text();
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(html, 'text/html');
+      const hero = doc.querySelector('.hero');
+      const chart = doc.querySelector('.chart');
+
+      if (!chart) throw new Error('Chart content not found');
+
+      chartPreview.innerHTML = `
+        <div class="embedded-ireal">
+          ${hero ? `<section class="embedded-hero">${hero.innerHTML}</section>` : ''}
+          <section class="embedded-chart">${chart.innerHTML}</section>
+        </div>
+      `;
+
+      chartPanel.classList.remove('hidden');
+      toggleChartBtn.textContent = '收起 chart';
+    } catch (error) {
+      console.error(error);
+      chartPreview.innerHTML = `<p>Chart 载入失败。可直接打开曲目链接查看。</p>`;
+      chartPanel.classList.remove('hidden');
+      toggleChartBtn.textContent = '收起 chart';
+    }
+  } else {
+    chartPanel.classList.add('hidden');
+    chartPreview.innerHTML = '';
+    toggleChartBtn.textContent = '展开 chart';
+  }
+});
 
 generateBtn.addEventListener('click', () => generate('normal'));
 lightBtn.addEventListener('click', () => generate('light'));
