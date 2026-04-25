@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Jazz Practice — 现在练什么</title>
+  <meta name="description" content="一个纯前端的爵士乐练习推荐器：支持随机，也支持减少练习决策疲劳。" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <main class="container">
+    <header class="hero">
+      <p class="eyebrow">JAZZ PRACTICE</p>
+      <h1>现在练什么</h1>
+      <div class="manifesto">
+        <p class="manifesto-en">Good practice is not about doing everything. It is about choosing the right next thing.</p>
+        <p class="manifesto-zh">好的练习，不是把所有东西都练一遍，而是先做对当下最值得做的下一件事。</p>
+      </div>
+    </header>
+
+    <hr class="section-rule" />
+
+    <div class="workspace-grid">
+      <section class="panel controls-panel">
+        <div class="panel-head">
+          <h2 class="panel-title">条件设置</h2>
+          <p class="panel-note">可全部留空；系统会在默认条件下给出推荐。</p>
+        </div>
+
+        <div class="controls-grid">
+          <label>
+            <span>现在有多少时间</span>
+            <select id="duration">
+              <option value="">随意</option>
+              <option value="10">10 分钟</option>
+              <option value="20">20 分钟</option>
+              <option value="30">30 分钟</option>
+              <option value="60">60 分钟</option>
+            </select>
+          </label>
+
+          <label>
+            <span>现在想偏重什么</span>
+            <select id="focus">
+              <option value="">随意</option>
+              <option value="time">节奏 / time</option>
+              <option value="harmony">和声 / comping</option>
+              <option value="fretboard">指板 / 音阶 / 琶音</option>
+              <option value="improv">即兴 / 语言</option>
+              <option value="ear">耳朵 / 听写 / 唱</option>
+              <option value="repertoire">曲目 / melody / form</option>
+              <option value="dominant-colors">dominant colors</option>
+              <option value="modern">modern / quartal / modal</option>
+            </select>
+          </label>
+
+          <label>
+            <span>现在状态</span>
+            <select id="energy">
+              <option value="">随意</option>
+              <option value="low">低状态</option>
+              <option value="medium">一般</option>
+              <option value="high">高状态</option>
+            </select>
+          </label>
+
+          <label>
+            <span>推荐倾向</span>
+            <select id="bias">
+              <option value="balanced">平衡</option>
+              <option value="personal">偏向进阶训练重点</option>
+              <option value="general">更通用</option>
+            </select>
+          </label>
+
+          <label class="full-span">
+            <span>补充偏好（可选）</span>
+            <input id="preferenceInput" type="text" placeholder="比如：最近想多练 comping / 难度适中 / 更偏 blues / 暂不推荐 rhythm changes" />
+          </label>
+        </div>
+
+        <div class="actions">
+          <button id="generateBtn" class="btn btn-primary">生成推荐</button>
+          <button id="lightBtn" class="btn btn-secondary">轻一些</button>
+          <button id="deepBtn" class="btn btn-secondary">深入一些</button>
+        </div>
+      </section>
+
+      <section class="panel result-panel" id="resultPanel">
+        <div class="panel-head">
+          <h2 class="panel-title">当前练习</h2>
+        </div>
+
+        <div class="result-empty" id="emptyState">
+          <p>点击生成后，系统会根据当前条件给出一组练习建议。</p>
+        </div>
+
+        <div class="result hidden" id="resultState">
+          <div class="result-header">
+            <p class="result-kicker" id="resultKicker"></p>
+            <h3 class="result-title" id="resultTitle"></h3>
+            <p class="result-summary" id="resultSummary"></p>
+          </div>
+
+          <div class="routine-block">
+            <h4>练习安排</h4>
+            <ol id="stepsList"></ol>
+          </div>
+
+          <div class="tune-block">
+            <h4>可搭配曲目</h4>
+            <p id="resultTune"></p>
+          </div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script src="./data/practice-data.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>
