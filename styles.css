@@ -305,12 +305,6 @@ li {
   background: #fff;
 }
 
-.chart-preview > iframe {
-  display: block;
-  width: 100%;
-  height: 900px;
-  border: 0;
-}
 
 .embedded-ireal {
   padding: 16px;

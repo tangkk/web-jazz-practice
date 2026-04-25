@@ -22,6 +22,7 @@ const resultTune = document.getElementById('resultTune');
 const tuneActions = document.getElementById('tuneActions');
 const toggleChartBtn = document.getElementById('toggleChartBtn');
 const openRealbookBtn = document.getElementById('openRealbookBtn');
+const openTranscriberBtn = document.getElementById('openTranscriberBtn');
 const chartPanel = document.getElementById('chartPanel');
 const chartPreview = document.getElementById('chartPreview');
 
@@ -372,7 +373,7 @@ function buildSummary(options, steps, duration) {
   const categories = [...new Set(steps.flatMap(step => step.categories))];
   const catText = categories.slice(0, 3).join(' / ');
   const prefText = options.preferenceText ? ` 已参考你的补充偏好：${options.preferenceText}。` : '';
-  return `${duration || 20} 分钟左右，偏向 ${catText || '基础综合'}。可以直接照着练，不用再临时做选择。${prefText}`;
+  return `偏向 ${catText || '基础综合'}。可以直接照着练，不用再临时做选择。${prefText}`;
 }
 
 function renderTune(tune) {
@@ -491,20 +492,11 @@ toggleChartBtn.addEventListener('click', async () => {
 });
 
 openRealbookBtn.addEventListener('click', () => {
-  const isHidden = chartPanel.classList.contains('hidden');
-  const currentModeIsRealbook = chartPreview.dataset.mode === 'realbook';
+  window.open('https://tangkk.github.io/web-realbook/', '_blank', 'noopener,noreferrer');
+});
 
-  if (!isHidden && currentModeIsRealbook) {
-    chartPanel.classList.add('hidden');
-    chartPreview.innerHTML = '';
-    delete chartPreview.dataset.mode;
-    return;
-  }
-
-  chartPreview.dataset.mode = 'realbook';
-  chartPreview.innerHTML = `<iframe src="https://tangkk.github.io/web-realbook/" loading="lazy" referrerpolicy="no-referrer" title="web-realbook"></iframe>`;
-  chartPanel.classList.remove('hidden');
-  toggleChartBtn.textContent = '展开 chart';
+openTranscriberBtn.addEventListener('click', () => {
+  window.open('https://tangkk.github.io/web-video-trans/', '_blank', 'noopener,noreferrer');
 });
 
 generateBtn.addEventListener('click', () => generate('normal'));
