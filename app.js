@@ -21,6 +21,7 @@ const stepsList = document.getElementById('stepsList');
 const resultTune = document.getElementById('resultTune');
 const tuneActions = document.getElementById('tuneActions');
 const toggleChartBtn = document.getElementById('toggleChartBtn');
+const openRealbookBtn = document.getElementById('openRealbookBtn');
 const chartPanel = document.getElementById('chartPanel');
 const chartPreview = document.getElementById('chartPreview');
 
@@ -487,6 +488,23 @@ toggleChartBtn.addEventListener('click', async () => {
     chartPreview.innerHTML = '';
     toggleChartBtn.textContent = '展开 chart';
   }
+});
+
+openRealbookBtn.addEventListener('click', () => {
+  const isHidden = chartPanel.classList.contains('hidden');
+  const currentModeIsRealbook = chartPreview.dataset.mode === 'realbook';
+
+  if (!isHidden && currentModeIsRealbook) {
+    chartPanel.classList.add('hidden');
+    chartPreview.innerHTML = '';
+    delete chartPreview.dataset.mode;
+    return;
+  }
+
+  chartPreview.dataset.mode = 'realbook';
+  chartPreview.innerHTML = `<iframe src="https://tangkk.github.io/web-realbook/" loading="lazy" referrerpolicy="no-referrer" title="web-realbook"></iframe>`;
+  chartPanel.classList.remove('hidden');
+  toggleChartBtn.textContent = '展开 chart';
 });
 
 generateBtn.addEventListener('click', () => generate('normal'));
