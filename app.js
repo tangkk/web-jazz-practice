@@ -84,7 +84,7 @@ const UI_TEXT = {
       openTranscriber: '打开 transcriber'
     },
     sections: {
-      routine: '练习安排',
+      routine: '练习选项',
       tune: '可搭配曲目',
       chart: 'Chart',
       metronome: 'Metronome'
@@ -102,7 +102,7 @@ const UI_TEXT = {
       light: '本次推荐侧重稳定与连续性',
       deep: '本次推荐侧重较高强度的训练',
       repertoire: '本次推荐包含曲目整合内容',
-      default: '本次推荐练习安排'
+      default: '本次推荐练习选项'
     }
   },
   en: {
