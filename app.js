@@ -679,7 +679,7 @@ openRealbookBtn.addEventListener('click', () => {
 });
 
 openTranscriberBtn.addEventListener('click', () => {
-  window.open('https://tangkk.github.io/web-video-trans/', '_blank', 'noopener,noreferrer');
+  window.open('https://tangkk.github.io/web-media-inspector/', '_blank', 'noopener,noreferrer');
 });
 
 generateBtn.addEventListener('click', () => generate('normal'));
